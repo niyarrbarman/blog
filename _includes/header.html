@@ -1,0 +1,20 @@
+<header class="site-header">
+    <div class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+        <span class="theme-icon">☾</span>
+    </div>
+
+    <h1 class="site-title">
+        <a href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
+    </h1>
+
+    <p class="site-author">~ {{ site.author }}</p>
+
+    <nav class="site-nav">
+        <a href="{{ '/' | relative_url }}">home</a>
+        <a href="{{ '/tags' | relative_url }}">tags</a>
+        <a href="{{ '/archive' | relative_url }}">archive</a>
+        <a href="https://niyarrbarman.github.io/">me, but formal</a>
+    </nav>
+
+    <div class="header-divider"></div>
+</header>

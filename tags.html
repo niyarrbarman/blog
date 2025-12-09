@@ -1,0 +1,163 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+<h1 style="text-align: center;">Tags</h1>
+
+<div class="tags-page">
+    <div class="tags-cloud">
+        {% assign sorted_tags = site.tags | sort %}
+        {% for tag in sorted_tags %}
+            <a href="#{{ tag[0] | slugify }}" class="tag-link">
+                {{ tag[0] }} <span class="tag-count">({{ tag[1].size }})</span>
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if site.tags.size == 0 %}
+        <p class="no-posts">No tags yet. Check back soon!</p>
+    {% else %}
+        <div class="tags-list">
+            {% assign sorted_tags = site.tags | sort %}
+            {% for tag in sorted_tags %}
+                <div class="tag-section" id="{{ tag[0] | slugify }}">
+                    <h2 class="tag-heading">{{ tag[0] }}</h2>
+                    <ul class="tag-posts">
+                        {% for post in tag[1] %}
+                            <li class="tag-post-item">
+                                <span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
+                                <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.tags-page {
+    margin-top: 32px;
+}
+
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    padding: 24px;
+    border-radius: 6px;
+}
+
+[data-theme="light"] .tags-cloud {
+    background-color: #f8f5ef;
+    border: 1px solid #e0d8cc;
+}
+
+[data-theme="dark"] .tags-cloud {
+    background-color: #221e18;
+    border: 1px solid #3d362c;
+}
+
+.tag-link {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+[data-theme="light"] .tag-link {
+    background-color: rgba(196, 163, 90, 0.15);
+    color: #8b6914;
+}
+
+[data-theme="light"] .tag-link:hover {
+    background-color: rgba(196, 163, 90, 0.3);
+    color: #6b5010;
+    border-bottom: none;
+}
+
+[data-theme="dark"] .tag-link {
+    background-color: rgba(212, 184, 106, 0.15);
+    color: #d4b86a;
+}
+
+[data-theme="dark"] .tag-link:hover {
+    background-color: rgba(212, 184, 106, 0.25);
+    color: #e8cc82;
+    border-bottom: none;
+}
+
+.tag-count {
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+
+.tags-list {
+    margin-top: 32px;
+}
+
+.tag-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 20px;
+}
+
+.tag-heading {
+    font-size: 1.3em;
+    font-weight: 500;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+}
+
+[data-theme="light"] .tag-heading {
+    border-bottom: 1px solid #e0d8cc;
+}
+
+[data-theme="dark"] .tag-heading {
+    border-bottom: 1px solid #3d362c;
+}
+
+.tag-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-post-item {
+    margin: 12px 0;
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+}
+
+.tag-post-item .post-date {
+    font-size: 0.85em;
+    flex-shrink: 0;
+    width: 100px;
+}
+
+[data-theme="light"] .tag-post-item .post-date {
+    color: #7a6f64;
+}
+
+[data-theme="dark"] .tag-post-item .post-date {
+    color: #9a8e7f;
+}
+
+@media (max-width: 600px) {
+    .tag-post-item {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .tag-post-item .post-date {
+        width: auto;
+    }
+}
+</style>

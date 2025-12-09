@@ -1,0 +1,66 @@
+# Site settings
+title: Latent Thoughts
+author: niyar r barman
+email: niyar-r.barman@utoulouse.fr
+description: "thoughts, half-baked and otherwise."
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Sass settings
+sass:
+  style: compressed
+  sass_dir: _sass
+
+# Permalink structure
+permalink: /:year/:month/:day/:title/
+
+# Collections
+collections:
+  posts:
+    output: true
+
+# Pagination (if needed)
+# paginate: 5
+# paginate_path: "/page:num/"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - style.json
+  - run.sh
+  - README.md
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-redirect-from
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# External links
+external_links:
+  personal_site: https://niyarrbarman.github.io/
+  cuda_log: https://niyarrbarman.github.io/cuda/

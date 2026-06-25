@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "one shot llms"
+title: "Neural Networks 101"
 date: 2026-06-22 00:00:00 +0000
 categories: [learning]
-tags: [llm, job]
+tags: [ml, gradient, backprop, optimization]
 author: niyar r barman
-excerpt: "learning log of LLMs for future j*b interviews"
+excerpt: "learning log of neural networks for future j*b interviews"
 ---
 
-this is inspired from [Alisa's book of LLMs](https://alisawuffles.notion.site/alisa-s-book-of-llms) to keep a track of all of the stuff i cover and on the off-chance that it might help someone. 
+this is inspired from [Alisa's book of LLMs](https://alisawuffles.notion.site/alisa-s-book-of-llms) to keep a track of all of the stuff i cover and on the off-chance that it might help someone. this blog covers everything neural networks. 
 
 <div class="contents-index" markdown="1">
 
@@ -17,7 +17,7 @@ this is inspired from [Alisa's book of LLMs](https://alisawuffles.notion.site/al
 
 </div>
 
-# neural nets 101
+
 ## gradients
 gradients are basically how neural nets figure out which way to move. when we train a neural net, we start with random weights. the model makes a prediction, we calculate a loss and then we ask: *if i slightly change this weight, how does the loss change?* the answer to that is given by the gradient.
 
@@ -259,6 +259,121 @@ $$
 in deep learning, the full hessian is usually too expensive to compute but conceptually, it is useful as it tells us about the local shape of the loss landscape. i will come back to properly when i study about [hessians/curvature in optimization](#hessians--curvature)
 
 ## backprop
+
+backpropagation is the algorithm used to compute gradients in a neural net. the important thing is that a neural net is not treated as one huge function whose derivative we manually write out. so instead the forward pass is broken down into many smaller operations, and these operations form a computation graph. 
+
+for example a model might look like:
+
+$$
+x \rightarrow h_1 \rightarrow h_2 \rightarrow \hat{y} \rightarrow L
+$$
+
+backprop computes $$\frac{\partial L}{\partial \theta}$$ for every trainable parameter $$\theta$$ in the model. the core idea is simple. each node receives a gradient from the node after it, multiplies it by its own local gradient, and passes it backward.
+
+### compuation graph
+
+a computation graph represents a function as small operations connected together. for example:
+
+$$
+f(x, y, z) = (x + y)\max(y, z)
+$$
+
+we can split this into smaller nodes:
+
+$$a = x+y \quad  b=\max(y, z) \quad   f=ab$$
+
+so the forward pass is:
+
+$$x, y, z \rightarrow a, b \rightarrow f$$
+
+this is useful because each small operation has a simple local derivative. the whole derivative is then built by combining these local derivatives using the chain rule.
+
+### local gradient, upstream gradient, downstream gradient
+
+for every node in the graph, there are two important gradients. the *local gradient* tells us how the node output changes with respect to its own input. the *upstream gradient* is the gradient coming from the later part of the graph. then the node sends back a *downstream gradient* to the earlier nodes. so roughly : $$\text{upstream gradient} \times \text{local gradient}$$
+
+for example if:
+
+$$
+z = f(y) \quad y = g(x)
+$$
+
+then the upstream gradient is:
+
+$$
+\frac{\partial z}{\partial y}\frac{\partial y}{\partial x}
+$$
+
+and, the local gradient is:
+
+$$
+\frac{\partial y}{\partial x}
+$$
+
+<!--### example-->
+
+### node intuitions
+
+some operations have very simple gradient behaviour. 
+
+#### for addition 
+
+$$z=x+y$$
+
+the upstream gradient is copied to both inputs.
+
+$$
+\frac{\partial z}{\partial x} = 1 \quad \frac{\partial z}{\partial y} = 1
+$$
+
+so addition distributes gradients.
+
+#### for multiplication:
+
+$$z=x \times y$$
+
+the gradients switch coefficients.
+
+$$
+\frac{\partial z}{\partial x} = y \quad \frac{\partial z}{\partial y} = x 
+$$
+
+so if the upstream gradient is $$g$$:
+
+$$
+\frac{\partial z}{\partial x} = gy \quad \frac{\partial z}{\partial y} = gx 
+$$
+
+#### for max:
+
+$$z = \max(x, y)$$
+
+the gradient flows only to the input that won the max.
+
+$$
+\frac{\partial z}{\partial x} = 1 \quad \frac{\partial z}{\partial y} = 0 \quad \text{if} \quad x > y \\
+\frac{\partial z}{\partial x} = 0 \quad \frac{\partial z}{\partial y} = 1 \quad \text{if} \quad x < y 
+$$
+
+so max routes gradients. this is also again why operations like ReLU can create zero gradients.
+
+### forward and backward pass
+
+training has two main phases. the forward pass computes activations and the loss:
+
+$$
+x \rightarrow \hat{y} \rightarrow L
+$$
+
+the backward pass computes the gradients
+
+$$
+L \rightarrow \hat{y} \rightarrow x
+$$
+
+during the forward pass, the model usually stores intermediate activations. these activations are needed during the backward pass.
+
+for example, if we have $$y = xW$$. we need the input activation $$x$$. this is why training uses more memory than inference. in inference, we only need the forward pass. in training, we need the forward pass $$+$$ stored activations for backprop.
 
 ### vanishing and exploding gradients
 

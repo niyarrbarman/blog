@@ -4,18 +4,55 @@
   const LIGHT_VALUE = "light";
   const DARK_VALUE = "dark";
   const DATA_ATTRIBUTE = "data-theme";
+  const TRANSITION_CLASS = "theme-transitioning";
+  const SWITCHING_CLASS = "is-switching";
+  const THEME_TRANSITION_MS = 360;
+  const ICON_SWAP_MS = 110;
+  let themeTransitionTimer;
+  let iconSwapTimer;
 
   // Get stored theme or default to light
   function getStoredTheme() {
     return localStorage.getItem(STORAGE_KEY) || LIGHT_VALUE;
   }
 
+  function shouldAnimateTheme() {
+    return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
   // Set theme
-  function setTheme(theme) {
-    document.documentElement.setAttribute(DATA_ATTRIBUTE, theme);
+  function setTheme(theme, animate) {
+    const root = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
+
+    window.clearTimeout(themeTransitionTimer);
+    window.clearTimeout(iconSwapTimer);
+
+    if (animate) {
+      root.classList.add(TRANSITION_CLASS);
+      if (toggle) {
+        toggle.classList.add(SWITCHING_CLASS);
+      }
+      iconSwapTimer = window.setTimeout(function () {
+        updateThemeIcon(theme);
+      }, ICON_SWAP_MS);
+    } else {
+      updateThemeIcon(theme);
+    }
+
+    root.setAttribute(DATA_ATTRIBUTE, theme);
     localStorage.setItem(STORAGE_KEY, theme);
-    updateThemeIcon(theme);
     updateHighlightTheme(theme);
+
+    if (animate) {
+      themeTransitionTimer = window.setTimeout(function () {
+        root.classList.remove(TRANSITION_CLASS);
+        if (toggle) {
+          toggle.classList.remove(SWITCHING_CLASS);
+        }
+        updateThemeIcon(theme);
+      }, THEME_TRANSITION_MS);
+    }
   }
 
   // Update theme toggle icon
@@ -49,13 +86,13 @@
   function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute(DATA_ATTRIBUTE);
     const newTheme = currentTheme === DARK_VALUE ? LIGHT_VALUE : DARK_VALUE;
-    setTheme(newTheme);
+    setTheme(newTheme, shouldAnimateTheme());
   }
 
   // Initialize theme on page load
   function initTheme() {
     const storedTheme = getStoredTheme();
-    setTheme(storedTheme);
+    setTheme(storedTheme, false);
 
     // Add click listener to toggle button
     const toggle = document.getElementById("theme-toggle");

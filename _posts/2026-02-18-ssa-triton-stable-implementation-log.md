@@ -8,7 +8,7 @@ author: niyar r barman
 excerpt: "i implemented SSA in triton on a 114m nemotron variant and stabilized training end-to-end."
 ---
 
-i spent the last few weeks implementing SSA end-to-end and this one was messy.
+i spent the last few weeks implementing SSA end-to-end and it was messy.
 
 ## quick paper context
 
@@ -399,5 +399,5 @@ more detailed commit-by-commit notes live in my internal timeline doc, but this 
 
 ## refs
 
-1. Naim, O., Bhar, S., Bolte, J., & Asher, N. (2025). *[Scaled Signed Averaging Improves In-Context and Early Learning Benchmark Performance in Small Transformers](https://arxiv.org/pdf/2508.14685)*. 
+1. Naim O, Bhar S, Bolte J, & Asher N (2025). *[Scaled Signed Averaging Improves In-Context and Early Learning Benchmark Performance in Small Transformers](https://arxiv.org/pdf/2508.14685)*. 
 2. OpenAI kernel team. (n.d.). *[Fused Attention (Triton Tutorial 06)](https://triton-lang.org/main/getting-started/tutorials/06-fused-attention.html)*. Triton documentation.

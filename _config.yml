@@ -1,8 +1,8 @@
 # Site settings
-title: Latent Thoughts
-author: niyar r barman
+title: latent space
+author: niyar
 email: niyar-r.barman@utoulouse.fr
-description: "thoughts, half-baked and otherwise."
+description: "niyar's personal blog"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site
 

@@ -243,7 +243,7 @@ during gradient descent, this increases the correct logit and decreases the wron
 
 ### hessians
 
-the gradient tells us the slop, the hessian tells us about the curvature. if the gradient is made of first derivatives, the hessian is made of second derivatives. for a scalar function $$f: \R^n \rightarrow \R$$, the hessian is:
+the gradient tells us the slope, the hessian tells us about the curvature. if the gradient is made of first derivatives, the hessian is made of second derivatives. for a scalar function $$f: \R^n \rightarrow \R$$, the hessian is:
 
 $$
 H =

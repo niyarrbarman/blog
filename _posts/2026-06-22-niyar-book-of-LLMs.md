@@ -8,7 +8,7 @@ author: niyar r barman
 excerpt: "learning log of LLMs for future j*b interviews"
 ---
 
-this is inspired by [Alisa's book of LLMs](https://alisawuffles.notion.site/alisa-s-book-of-llms) to keep a track of all of the stuff i cover and on the off-chance that it might help someone. 
+this is inspired from [Alisa's book of LLMs](https://alisawuffles.notion.site/alisa-s-book-of-llms) to keep a track of all of the stuff i cover and on the off-chance that it might help someone. 
 
 <div class="contents-index" markdown="1">
 
@@ -21,7 +21,7 @@ this is inspired by [Alisa's book of LLMs](https://alisawuffles.notion.site/alis
 ## gradients
 gradients are basically how neural nets figure out which way to move. when we train a neural net, we start with random weights. the model makes a prediction, we calculate a loss and then we ask: *if i slightly change this weight, how does the loss change?* the answer to that is given by the gradient.
 
-if the gradient is positive, increaing the weight increase the loss, so we probably want to decrease the weight. if the gradient is negative, increasing the weight decreases the loss, so we probably want to decrease the weight. 
+if the gradient is positive, increaing the weight increases the loss, so we probably want to decrease the weight. if the gradient is negative, increasing the weight decreases the loss, so we probably want to increase the weight. 
 
 this is the intuition behind gradient descent.
 
@@ -31,11 +31,11 @@ $$
 
 ### partial derivatives
 
-for an nn, the loss depends on a lot of parameters: $$ L = L(w_1, w_2, \ldots, w_n)$$. so we do not ask how the loss changes with respect to one weight but for every single weight.
+for a neural net, the loss depends on a lot of parameters: $$ L = L(w_1, w_2, \ldots, w_n)$$. so we do not ask how the loss changes with respect to one weight but with respect to every single weight.
 
 $$\frac{\partial L}{\partial w_1}, \frac{\partial L}{\partial w_1}, \ldots, \frac{\partial L}{\partial w_n} $$
 
-each of these is a partial derivative. a partial derivative tells us how the output changes with respect to one variable while all the others are fixed. this is especially useful as neural nets have millions, billions (or now even TRILLIONS!!) of weights and we need to know how each of them contributed to the final loss.
+each of these is a partial derivative. a partial derivative tells us how the output changes with respect to one variable while all the others are fixed. this is especially useful as neural nets have millions, billions (or now TRILLIONS!!) of weights and we need to know how each of them contributed to the final loss.
 
 ### gradient of a scalar
 
@@ -100,7 +100,7 @@ $$
 $$
 
 
-so the derivative can be written using the sigmoid output itseld. also sigmoid saturates when $$x$$ is very positive or very negative. in both cases the derivative becomes very small which can cause [*vanishing gradients*](#vanishing-and-exploding-gradients). 
+so the derivative can be written using the sigmoid output itself. also sigmoid saturates when $$x$$ is very positive or very negative. in both cases the derivative becomes very small which can cause [*vanishing gradients*](#vanishing-and-exploding-gradients). 
 
 #### tanh
 
@@ -174,7 +174,6 @@ $$p_i(\delta_{ij} - p_i)$$
 
 where $$\delta_{ij}$$ is 1 when $$i = j$$ and 0 otherwise.
 
-so if $$i = j$$:
 
 $$
 \frac{\partial p_i}{\partial z_j} = 
@@ -232,7 +231,7 @@ p_j & j \neq t
 \end{aligned}
 $$
 
-or in vector form $$p-y$$ where $$y$$ is one hot target vector.
+or in vector form $$p-y$$ where $$y$$ is the one-hot target vector.
 
 softmax alone has a full jacobian, but softmax $$+$$ CE simplifies to $$p-y$$
 

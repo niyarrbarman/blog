@@ -288,6 +288,63 @@ $$x, y, z \rightarrow a, b \rightarrow f$$
 
 this is useful because each small operation has a simple local derivative. the whole derivative is then built by combining these local derivatives using the chain rule.
 
+### example
+
+Lets take $$f(x, y, z) = (x + y)\max(y, z)$$ and lets suppose $$x = 1 \quad y = 2 \quad z = 0$$. so the forward pass is:
+
+$$
+\begin{aligned}a &= x+y \\ &= 1 + 2\\ &= 3 \end{aligned} \quad 
+\begin{aligned}b &= \max(y,z) \\ &= \max(2, 0) \\ &= 2 \end{aligned} \quad 
+\begin{aligned}f &= ab\\ &= 3 \times 2 \\ &= 6 \end{aligned}$$
+
+now we go backward. we start with $$\frac{\partial f}{\partial f} = 1$$, because the output changes with respect to itself at rate = 1. now we go to the previous nodes. $$f = ab$$ so the local gradients are:
+
+$$
+\frac{\partial f}{\partial a} = b = 2 \quad \frac{\partial f}{\partial b} = a = 3
+$$
+
+now for $$a = x + y$$, the local gradients are:
+
+$$
+\frac{\partial a}{\partial x} = 1 \quad \frac{\partial a}{\partial y} = 1
+$$
+
+so the gradients flowing through the addition branch are:
+
+$$
+2 \cdot 1 = 2
+$$
+
+$$
+2 \cdot 1 = 2
+$$
+
+and now for $$b = \max(y, z)$$. since $$y>z$$, the max node chose $$y$$. the local gradients are:
+
+$$
+\frac{\partial b}{\partial y} = 1 \quad \frac{\partial b}{\partial z} = 0
+$$
+
+therefore, the gradients flowing through the max branch are:
+
+$$
+3 \cdot 1 = 3
+$$
+
+$$
+3 \cdot 0 = 0
+$$
+
+now since $$y$$ is used in both branches, we add the gradients flowing through it. therefore the final gradients are:
+
+$$
+\frac{\partial f}{\partial x} = 2 \quad \frac{\partial f}{\partial y} = 2 + 3 = 5 \quad \frac{\partial f}{\partial z} = 0
+$$
+
+**note:** when a variable is used in multiple branches, the gradients flowing through it are *added together*.
+
+
+
 ### local gradient, upstream gradient, downstream gradient
 
 for every node in the graph, there are two important gradients. the *local gradient* tells us how the node output changes with respect to its own input. the *upstream gradient* is the gradient coming from the later part of the graph. then the node sends back a *downstream gradient* to the earlier nodes. so roughly : $$\text{upstream gradient} \times \text{local gradient}$$
@@ -310,7 +367,6 @@ $$
 \frac{\partial y}{\partial x}
 $$
 
-<!--### example-->
 
 ### node intuitions
 
@@ -374,6 +430,29 @@ $$
 during the forward pass, the model usually stores intermediate activations. these activations are needed during the backward pass.
 
 for example, if we have $$y = xW$$. we need the input activation $$x$$. this is why training uses more memory than inference. in inference, we only need the forward pass. in training, we need the forward pass $$+$$ stored activations for backprop.
+
+### backprop order
+
+backprop visits nodes in reverse topological order. that means we start from the loss and move backward through the graph. for example if we have a two layer network:
+
+$$
+x \rightarrow h_1 \rightarrow h_2 \rightarrow L
+$$
+
+the backward pass will look like:
+
+<center>
+<img src="/assets/images/neural-net-101/backward_pass.png" alt="backprop backward pass" width="60%" />
+</center>
+
+activation gradients are needed to keep propagating the gradients backward. parameter gradients are needed to update the weights. so gradients with respect to activations are used to continue backprop, while gradients with respect to parameters are stored for the optimizer.
+
+### why loss is usually scalar?
+
+backprop is reverse mode autodiff. for $$f: \R^n \rightarrow \R^m$$, one backward pass gives us $$v^T J$$ for some seed vector $$v \in \R^m $$, at a cost independent of $$n$$. so when $$m=1$$ (scalar output), the seed is just $$v=1$$ and that one pass gives us the entire gradient $$\nabla_\theta L$$ even if $$\theta$$ has billions of params. thats why `.backward()` works straight out of the box on a scalar and why pytorch throws an error if the tensor isnt scalar. it does not know which seed $$v$$ to use. 
+
+if the output is a vector $$m>1$$, we would need $$m$$ separate backward passes to get the full jacobian. so reverse mode backprop is only efficient when we have few outputs and a lot of parameters. 
+
 
 ### vanishing and exploding gradients
 

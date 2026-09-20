@@ -38,12 +38,12 @@ the maths average across five benchmarks went from 42.51 to 50.17. the largest g
 then i compressed it in two steps: 23.22b to 13.98b, then 13.98b to 8.36b. each cut uses structured pruning to remove whole layers and width components, followed by a full distillation run to make the new architecture usable again.
 
 <button class="image-lightbox-trigger" type="button" data-lightbox="pipeline-lightbox" aria-label="Expand the Luciole compression pipeline">
-  <img class="pipeline-figure" src="/assets/images/luciole-distillation/pipeline.svg" alt="Luciole compression pipeline from a 23.22B base model to an 8.36B distilled student" />
+  <img class="pipeline-figure" src="{{ '/assets/images/luciole-distillation/pipeline.svg' | relative_url }}" alt="Luciole compression pipeline from a 23.22B base model to an 8.36B distilled student" />
 </button>
 
 <dialog id="pipeline-lightbox" class="image-lightbox" aria-label="Expanded Luciole compression pipeline">
   <button class="image-lightbox-close" type="button" aria-label="Close expanded image">&times;</button>
-  <img class="image-lightbox-image" src="/assets/images/luciole-distillation/pipeline.svg" alt="Luciole compression pipeline from a 23.22B base model to an 8.36B distilled student" />
+  <img class="image-lightbox-image" src="{{ '/assets/images/luciole-distillation/pipeline.svg' | relative_url }}" alt="Luciole compression pipeline from a 23.22B base model to an 8.36B distilled student" />
 </dialog>
 
 <!-- *the model ladder. continued pretraining makes the teacher better at maths first; the two prune-and-distil stages then do the compression.* -->

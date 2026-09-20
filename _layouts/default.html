@@ -25,6 +25,11 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
+  {% if page.plotly %}
+  <script defer src="https://cdn.plot.ly/plotly-4.0.0.min.js" charset="utf-8"></script>
+  <script defer src="{{ '/assets/js/distillation-plots.js' | relative_url }}"></script>
+  {% endif %}
+
   <!-- Main script -->
   <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>

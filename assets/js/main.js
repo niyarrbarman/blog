@@ -43,6 +43,7 @@
     root.setAttribute(DATA_ATTRIBUTE, theme);
     localStorage.setItem(STORAGE_KEY, theme);
     updateHighlightTheme(theme);
+    document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: theme } }));
 
     if (animate) {
       themeTransitionTimer = window.setTimeout(function () {
@@ -106,6 +107,42 @@
     document.addEventListener("DOMContentLoaded", initTheme);
   } else {
     initTheme();
+  }
+})();
+
+// Expandable article images
+(function () {
+  function initImageLightboxes() {
+    document.querySelectorAll(".image-lightbox-trigger").forEach(function (trigger) {
+      var dialogId = trigger.getAttribute("data-lightbox");
+      var dialog = dialogId ? document.getElementById(dialogId) : null;
+
+      if (!dialog || typeof dialog.showModal !== "function") return;
+
+      var closeButton = dialog.querySelector(".image-lightbox-close");
+
+      trigger.addEventListener("click", function () {
+        dialog.showModal();
+      });
+
+      closeButton.addEventListener("click", function () {
+        dialog.close();
+      });
+
+      dialog.addEventListener("click", function (event) {
+        if (event.target === dialog) dialog.close();
+      });
+
+      dialog.addEventListener("close", function () {
+        trigger.focus();
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initImageLightboxes);
+  } else {
+    initImageLightboxes();
   }
 })();
 
